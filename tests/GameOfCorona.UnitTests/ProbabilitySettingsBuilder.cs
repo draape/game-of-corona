@@ -6,8 +6,8 @@ namespace GameOfCorona.UnitTests
         double _isolation;
         double _quarantine;
         double _stayInfected;
-        double _healthyNotImmune;
-        double _healthyAndImmune;
+        double _healthy;
+        double _immune;
         double _dies;
 
         public ProbabilitySettingsBuilder WithInfection(double probability)
@@ -34,27 +34,25 @@ namespace GameOfCorona.UnitTests
             return this;
         }
         
-        public ProbabilitySettingsBuilder WithHealthyNotImmune(double probability)
+        public ProbabilitySettingsBuilder WithHealthy(double probability)
         {
-            _healthyNotImmune = probability;
+            _healthy = probability;
             return this;
         }
         
-        public ProbabilitySettingsBuilder WithHealthyAndImmune(double probability)
+        public ProbabilitySettingsBuilder WithImmune(double probability)
         {
-            _healthyAndImmune = probability;
+            _immune = probability;
             return this;
         }
-        
+
         public ProbabilitySettingsBuilder WithDies(double probability)
         {
             _dies = probability;
             return this;
         }
         
-        public ProbabilitySettings Build()
-        {
-            return new ProbabilitySettings(_infection, _isolation, _quarantine, _stayInfected, _healthyNotImmune, _healthyAndImmune, _dies);
-        }
+        public ProbabilitySettings Build() => 
+            new ProbabilitySettings(_infection, _isolation, _quarantine, _stayInfected, _healthy, _immune, _dies);
     }
 }

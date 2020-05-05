@@ -108,31 +108,29 @@ namespace GameOfCorona.UnitTests
         [Theory]
         [InlineData(1, false)]
         [InlineData(0, true)]
-        public void An_infected_person_is_healthy_again_but_not_immune(double probability, bool expected)
+        public void An_infected_person_is_healthy_again(double probability, bool expected)
         {
             // Needs to pass 1.0 in stay infected. Could be optimized.
-            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthyNotImmune(probability).Build();
+            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthy(probability).Build();
             
             var infectedPerson = new Person(settings) {IsInfected = true};
             infectedPerson.Sleep();
             
             Assert.Equal(expected, infectedPerson.IsInfected);
-            Assert.False(infectedPerson.IsImmune);
         }
 
         [Theory]
-        [InlineData(1, false, true)]
-        [InlineData(0, true, false)]
-        public void An_infected_person_is_healthy_again_and_immune(double probability, bool expectedInfected, bool expectedImmune)
+        [InlineData(1, true)]
+        [InlineData(0, false)]
+        public void An_infected_person_is_healthy_again_and_immune(double probability, bool expected)
         {
             // Needs to pass 1.0 in stay infected. Could be optimized.
-            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthyAndImmune(probability).Build();
+            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthy(1).WithImmune(probability).Build();
             
             var infectedPerson = new Person(settings) {IsInfected = true};
             infectedPerson.Sleep();
             
-            Assert.Equal(expectedInfected, infectedPerson.IsInfected);
-            Assert.Equal(expectedImmune, infectedPerson.IsImmune);
+            Assert.Equal(expected, infectedPerson.IsImmune);
         }
         
         [Theory]
@@ -151,7 +149,7 @@ namespace GameOfCorona.UnitTests
         [Fact]
         public void A_healthy_person_cannot_become_immune()
         {
-            var settings = _probabilitySettingsBuilder.WithHealthyAndImmune(1).Build();
+            var settings = _probabilitySettingsBuilder.WithHealthy(1).Build();
             
             var person = new Person(settings);
             
@@ -167,8 +165,8 @@ namespace GameOfCorona.UnitTests
                 .WithInfection(1)
                 .WithIsolation(1)
                 .WithStayInfected(1)
-                .WithHealthyNotImmune(1)
-                .WithHealthyAndImmune(1)
+                .WithImmune(1)
+                .WithHealthy(1)
                 .WithQuarantine(1)
                 .WithDies(1)
                 .Build();
