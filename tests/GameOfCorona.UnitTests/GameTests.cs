@@ -31,6 +31,18 @@ namespace GameOfCorona.UnitTests
             Assert.Equal(expected, person.IsInIsolation);
         }
         
+        [Fact]
+        public void When_a_healthy_person_gets_infected_Should_not_go_into_isolation()
+        {
+            var person = new Person();
+            var infectedPerson = new Person {IsInfected = true};
+            
+            person.Meet(infectedPerson, 100);
+            person.Sleep(100);
+            
+            Assert.False(person.IsInIsolation);
+        }
+        
         //An infected person goes into quarantine 
     }
 }

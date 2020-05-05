@@ -18,7 +18,7 @@ namespace GameOfCorona
 
         public void Sleep(double pIsolation)
         {
-            if(CheckRandom(pIsolation))
+            if(CheckRandom(pIsolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
         }
 
