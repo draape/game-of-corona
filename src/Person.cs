@@ -13,9 +13,11 @@ namespace GameOfCorona
 
         public void Meet(Person person, double probability)
         {
-            if(CheckRandom(probability) && !person.IsInQuarantine)
+            if (person.IsInQuarantine || IsImmune) return;
+            
+            if(CheckRandom(probability))
                 IsInfected = person.IsInfected;
-
+                
             _hasMetInfectedPerson = person.IsInfected;
         }
 
