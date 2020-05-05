@@ -4,51 +4,54 @@ namespace GameOfCorona
 {
     public class Person
     {
+        readonly ProbabilitySettings _probabilities;
         bool _hasMetInfectedPerson;
+
         public bool IsInfected { get; set; }
         public bool IsInIsolation { get; set; }
         public bool IsInQuarantine { get; set; }
         public bool IsImmune { get; set; }
         public bool IsDead { get; set; }
+        
+        public Person(ProbabilitySettings probabilities) => _probabilities = probabilities;
 
-        public void Meet(Person person, double probability)
+        public void Meet(Person person)
         {
             if (person.IsInQuarantine || IsImmune || IsDead) return;
             
-            if(CheckRandom(probability))
+            if(CheckRandom(_probabilities.Infection))
                 IsInfected = person.IsInfected;
                 
             _hasMetInfectedPerson = person.IsInfected;
         }
 
-        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune,
-            double pHealthyAndImmune, double pDies)
+        public void Sleep()
         {
             if (IsDead)
                 return;
             
-            if(CheckRandom(pIsolation) && !IsInfected)
+            if(CheckRandom(_probabilities.Isolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
 
-            if(CheckRandom(pQuarantine))
+            if(CheckRandom(_probabilities.Quarantine))
                 IsInQuarantine = IsInfected;
 
-            if (!CheckRandom(pStayInfected))
+            if (!CheckRandom(_probabilities.StayInfected))
                 IsInfected = false;
 
-            if (CheckRandom(pHealthyNotImmune) && IsInfected)
+            if (CheckRandom(_probabilities.HealthyNotImmune) && IsInfected)
             {
                 IsImmune = false;
                 IsInfected = false;
             }
             
-            if (CheckRandom(pHealthyAndImmune) && IsInfected)
+            if (CheckRandom(_probabilities.HealthyAndImmune) && IsInfected)
             {
                 IsImmune = true;
                 IsInfected = false;
             }
 
-            if (CheckRandom(pDies))
+            if (CheckRandom(_probabilities.Dies))
                 IsDead = true;
         }
 
