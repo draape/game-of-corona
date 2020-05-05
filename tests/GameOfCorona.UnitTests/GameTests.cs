@@ -122,7 +122,16 @@ namespace GameOfCorona.UnitTests
             Assert.Equal(expected, infectedPerson.IsDead);
         }
 
-        // TODO healthy persons can't turn immune
+        [Fact]
+        public void A_healthy_person_cannot_become_immune()
+        {
+            var person = new Person();
+            
+            person.Sleep(0, 0, 0, 1.0, 1.0, 0);
+            
+            Assert.False(person.IsImmune);
+        }
+
         // TODO dead persons can't become anything else
     }
 }

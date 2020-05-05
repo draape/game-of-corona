@@ -33,13 +33,13 @@ namespace GameOfCorona
             if (!CheckRandom(pStayInfected))
                 IsInfected = false;
 
-            if (CheckRandom(pHealthyNotImmune))
+            if (CheckRandom(pHealthyNotImmune) && IsInfected)
             {
                 IsImmune = false;
                 IsInfected = false;
             }
             
-            if (CheckRandom(pHealthyAndImmune))
+            if (CheckRandom(pHealthyAndImmune) && IsInfected)
             {
                 IsImmune = true;
                 IsInfected = false;
