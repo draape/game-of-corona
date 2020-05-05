@@ -17,6 +17,17 @@ namespace GameOfCorona.UnitTests
             Assert.Equal(expected, person.IsInfected);
         }
         
+        [Fact]
+        public void A_quarantined_person_cannot_infect_others()
+        {
+            var person = new Person();
+            var infectedPerson = new Person {IsInfected = true, IsInQuarantine = true};
+            
+            person.Meet(infectedPerson, 1.0);
+            
+            Assert.False(person.IsInfected);
+        }
+        
         [Theory]
         [InlineData(1, true)]
         [InlineData(0, false)]
@@ -99,8 +110,9 @@ namespace GameOfCorona.UnitTests
             
             Assert.Equal(expected, infectedPerson.IsDead);
         }
-        
+
         // TODO healthy persons can't turn immune
         // TODO dead persons can't become anything else
+        // An immune person can’t be infected
     }
 }
