@@ -17,13 +17,16 @@ namespace GameOfCorona
             _hasMetInfectedPerson = person.IsInfected;
         }
 
-        public void Sleep(double pIsolation, double pQuarantine)
+        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected)
         {
             if(CheckRandom(pIsolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
 
             if(CheckRandom(pQuarantine))
                 IsInQuarantine = IsInfected;
+
+            if (!CheckRandom(pStayInfected))
+                IsInfected = false;
         }
 
         static bool CheckRandom(in double probability)
