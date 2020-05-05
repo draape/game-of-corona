@@ -18,7 +18,7 @@ namespace GameOfCorona
             _hasMetInfectedPerson = person.IsInfected;
         }
 
-        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune)
+        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune, double pHealthyAndImmune)
         {
             if(CheckRandom(pIsolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
@@ -32,6 +32,12 @@ namespace GameOfCorona
             if (CheckRandom(pHealthyNotImmune))
             {
                 IsImmune = false;
+                IsInfected = false;
+            }
+            
+            if (CheckRandom(pHealthyAndImmune))
+            {
+                IsImmune = true;
                 IsInfected = false;
             }
         }
