@@ -9,6 +9,7 @@ namespace GameOfCorona
         public bool IsInIsolation { get; set; }
         public bool IsInQuarantine { get; set; }
         public bool IsImmune { get; set; }
+        public bool IsDead { get; set; }
 
         public void Meet(Person person, double probability)
         {
@@ -18,7 +19,8 @@ namespace GameOfCorona
             _hasMetInfectedPerson = person.IsInfected;
         }
 
-        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune, double pHealthyAndImmune)
+        public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune,
+            double pHealthyAndImmune, double pDies)
         {
             if(CheckRandom(pIsolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
@@ -40,6 +42,9 @@ namespace GameOfCorona
                 IsImmune = true;
                 IsInfected = false;
             }
+
+            if (CheckRandom(pDies))
+                IsDead = true;
         }
 
         static bool CheckRandom(in double probability)
