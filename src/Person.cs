@@ -33,20 +33,25 @@ namespace GameOfCorona
             if(CheckRandom(_probabilities.Isolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
 
-            if(CheckRandom(_probabilities.Quarantine)) // TODO can get out of quarantine without being healthy first
+            HandleInfectedPerson();
+        }
+
+        void HandleInfectedPerson()
+        {
+            if (!IsInfected)
+                return;
+
+            if (CheckRandom(_probabilities.Quarantine))
                 IsInQuarantine = IsInfected;
 
-            if (!CheckRandom(_probabilities.StayInfected))
-                IsInfected = false;
-
-            if (CheckRandom(_probabilities.Healthy) && IsInfected) // TODO if in quarantine, will not get out 
+            if (CheckRandom(_probabilities.Healthy)) // TODO if in quarantine, will not get out 
             {
                 IsInfected = false;
                 if (CheckRandom(_probabilities.Immune))
                     IsImmune = true;
             }
 
-            if (CheckRandom(_probabilities.Dies)) // TODO dies when healthy
+            if (CheckRandom(_probabilities.Dies))
                 IsDead = true;
         }
 

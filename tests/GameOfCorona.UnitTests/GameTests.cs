@@ -11,7 +11,7 @@ namespace GameOfCorona.UnitTests
         [Theory]
         [InlineData(1, true)]
         [InlineData(0, false)]
-        public void When_a_healthy_person_is_in_contact_with_an_infected_person_Should_get_infected(double probability, bool expected)
+        public void A_healthy_person_in_contact_with_an_infected_person_gets_infected(double probability, bool expected)
         {
             var settings = _probabilitySettingsBuilder.WithInfection(probability).Build();
 
@@ -52,7 +52,7 @@ namespace GameOfCorona.UnitTests
         [Theory]
         [InlineData(1, true)]
         [InlineData(0, false)]
-        public void When_a_healthy_person_is_in_contact_with_an_infected_person_Should_go_into_isolation(double probability, bool expected)
+        public void A_healthy_person_in_contact_with_an_infected_person_goes_into_isolation(double probability, bool expected)
         {
             var settings = _probabilitySettingsBuilder.WithIsolation(probability).Build();
             
@@ -66,7 +66,7 @@ namespace GameOfCorona.UnitTests
         }
         
         [Fact]
-        public void When_a_healthy_person_gets_infected_Should_not_go_into_isolation()
+        public void A_healthy_person_that_gets_infected_should_not_go_into_isolation()
         {
             var settings = _probabilitySettingsBuilder.WithInfection(1).WithIsolation(1).Build();
             
@@ -92,17 +92,15 @@ namespace GameOfCorona.UnitTests
             Assert.Equal(expected, infectedPerson.IsInQuarantine);
         }
 
-        [Theory]
-        [InlineData(1, true)]
-        [InlineData(0, false)]
-        public void An_infected_person_stays_infected(double probability, bool expected)
+        [Fact]
+        public void An_infected_person_stays_infected()
         {
-            var settings = _probabilitySettingsBuilder.WithStayInfected(probability).Build();
+            var settings = _probabilitySettingsBuilder.Build();
             
             var infectedPerson = new Person(settings) {IsInfected = true};
             infectedPerson.Sleep();
             
-            Assert.Equal(expected, infectedPerson.IsInfected);
+            Assert.True(infectedPerson.IsInfected);
         }
 
         [Theory]
@@ -110,8 +108,7 @@ namespace GameOfCorona.UnitTests
         [InlineData(0, true)]
         public void An_infected_person_is_healthy_again(double probability, bool expected)
         {
-            // Needs to pass 1.0 in stay infected. Could be optimized.
-            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthy(probability).Build();
+            var settings = _probabilitySettingsBuilder.WithHealthy(probability).Build();
             
             var infectedPerson = new Person(settings) {IsInfected = true};
             infectedPerson.Sleep();
@@ -124,8 +121,7 @@ namespace GameOfCorona.UnitTests
         [InlineData(0, false)]
         public void An_infected_person_is_healthy_again_and_immune(double probability, bool expected)
         {
-            // Needs to pass 1.0 in stay infected. Could be optimized.
-            var settings = _probabilitySettingsBuilder.WithStayInfected(1).WithHealthy(1).WithImmune(probability).Build();
+            var settings = _probabilitySettingsBuilder.WithHealthy(1).WithImmune(probability).Build();
             
             var infectedPerson = new Person(settings) {IsInfected = true};
             infectedPerson.Sleep();
@@ -164,7 +160,6 @@ namespace GameOfCorona.UnitTests
             var settings = _probabilitySettingsBuilder
                 .WithInfection(1)
                 .WithIsolation(1)
-                .WithStayInfected(1)
                 .WithImmune(1)
                 .WithHealthy(1)
                 .WithQuarantine(1)
@@ -182,6 +177,17 @@ namespace GameOfCorona.UnitTests
             Assert.False(person.IsImmune);
             Assert.False(person.IsInQuarantine);
             Assert.False(person.IsInIsolation);
+        }
+
+        [Fact]
+        public void A_healthy_person_should_not_die()
+        {
+            var settings = _probabilitySettingsBuilder.WithDies(1).Build();
+            
+            var infectedPerson = new Person(settings);
+            infectedPerson.Sleep();
+            
+            Assert.False(infectedPerson.IsDead);
         }
     }
 }
