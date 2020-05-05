@@ -26,7 +26,7 @@ namespace GameOfCorona.UnitTests
             var infectedPerson = new Person {IsInfected = true};
             
             person.Meet(infectedPerson, 0);
-            person.Sleep(probability);
+            person.Sleep(probability, 0);
             
             Assert.Equal(expected, person.IsInIsolation);
         }
@@ -38,9 +38,20 @@ namespace GameOfCorona.UnitTests
             var infectedPerson = new Person {IsInfected = true};
             
             person.Meet(infectedPerson, 100);
-            person.Sleep(100);
+            person.Sleep(100, 0);
             
             Assert.False(person.IsInIsolation);
+        }
+        
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(0, false)]
+        public void An_infected_person_Should_go_into_quarantine(double probability, bool expected)
+        {
+            var infectedPerson = new Person {IsInfected = true};
+            infectedPerson.Sleep(0, probability);
+            
+            Assert.Equal(expected, infectedPerson.IsInQuarantine);
         }
         
         //An infected person goes into quarantine 
