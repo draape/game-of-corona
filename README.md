@@ -8,6 +8,8 @@ The twist is to make this about the spread of a virus instead, and seeing how th
 
 ## The rules
 
+Most of the rules have a probability that the rule will come in to play, noted in parentheses. These are suggestions, feel free to play around with them, but make sure your test cases reflect your changes!
+
 - A healthy person in contact with an infected person gets infected (50%)
 - An infected person goes into quarantine (80%)
 - A healthy person in contact with an infected person goes into isolation (10%)
