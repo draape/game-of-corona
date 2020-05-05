@@ -131,7 +131,21 @@ namespace GameOfCorona.UnitTests
             
             Assert.False(person.IsImmune);
         }
-
-        // TODO dead persons can't become anything else
+        
+        [Fact]
+        public void A_dead_person_stays_dead()
+        {
+            var person = new Person{IsDead = true};
+            var infectedPerson = new Person {IsInfected = true};
+            
+            person.Meet(infectedPerson, 1.0);
+            person.Sleep(1.0, 1.0, 1.0, 1.0, 1.0, 0);
+            
+            Assert.True(person.IsDead);
+            Assert.False(person.IsInfected);
+            Assert.False(person.IsImmune);
+            Assert.False(person.IsInQuarantine);
+            Assert.False(person.IsInIsolation);
+        }
     }
 }

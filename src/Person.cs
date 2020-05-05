@@ -13,7 +13,7 @@ namespace GameOfCorona
 
         public void Meet(Person person, double probability)
         {
-            if (person.IsInQuarantine || IsImmune) return;
+            if (person.IsInQuarantine || IsImmune || IsDead) return;
             
             if(CheckRandom(probability))
                 IsInfected = person.IsInfected;
@@ -24,6 +24,9 @@ namespace GameOfCorona
         public void Sleep(double pIsolation, double pQuarantine, double pStayInfected, double pHealthyNotImmune,
             double pHealthyAndImmune, double pDies)
         {
+            if (IsDead)
+                return;
+            
             if(CheckRandom(pIsolation) && !IsInfected)
                 IsInIsolation = _hasMetInfectedPerson;
 
