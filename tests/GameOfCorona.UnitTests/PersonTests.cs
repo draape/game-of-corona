@@ -2,11 +2,11 @@ using Xunit;
 
 namespace GameOfCorona.UnitTests
 {
-    public class GameTests
+    public class PersonTests
     {
         readonly ProbabilitySettingsBuilder _probabilitySettingsBuilder;
         
-        public GameTests() => _probabilitySettingsBuilder = new ProbabilitySettingsBuilder();
+        public PersonTests() => _probabilitySettingsBuilder = new ProbabilitySettingsBuilder();
 
         [Theory]
         [InlineData(1, true)]

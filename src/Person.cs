@@ -2,7 +2,15 @@ using System;
 
 namespace GameOfCorona
 {
-    public class Person
+    public interface IPerson
+    {
+        public void Meet(IPerson person);
+        public void Sleep();
+        public bool IsInQuarantine { get; }
+        public bool IsInfected { get; }
+    }
+    
+    public class Person : IPerson
     {
         readonly ProbabilitySettings _probabilities;
         bool _hasMetInfectedPerson;
@@ -15,7 +23,7 @@ namespace GameOfCorona
         
         public Person(ProbabilitySettings probabilities) => _probabilities = probabilities;
 
-        public void Meet(Person person)
+        public void Meet(IPerson person)
         {
             if (person.IsInQuarantine || IsImmune || IsDead) return;
             
