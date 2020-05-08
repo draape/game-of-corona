@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using FakeItEasy;
 using Xunit;
 
@@ -18,6 +20,39 @@ namespace GameOfCorona.UnitTests
             world.Populate(persons);
 
             Assert.Equal(persons.Count, world.Population.Length);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(9)]
+        [InlineData(16)]
+        [InlineData(25)]
+        [InlineData(36)]
+        [InlineData(49)]
+        [InlineData(64)]
+        [InlineData(81)]
+        [InlineData(100)]
+        public void A_world_population_must_be_representable_as_square_grid(int population)
+        {
+            var world = new World();
+            var persons = GenerateFakePersons(population).ToList();
+
+            world.Populate(persons);
+            
+            Assert.Equal(population, world.Population.Length);
+        }
+        
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(12)]
+        [InlineData(20)]
+        public void An_error_is_thrown_if_the_world_population_cannot_be_represented_as_a_square_grid(int population)
+        {
+            var world = new World();
+            var persons = GenerateFakePersons(population).ToList();
+
+            Assert.Throws<ArgumentException>(() => world.Populate(persons));
         }
 
         [Fact]
@@ -70,12 +105,28 @@ namespace GameOfCorona.UnitTests
             A.CallTo(() => personA.Sleep()).MustHaveHappened();
             A.CallTo(() => personB.Sleep()).MustHaveHappened();
         }
+
+        [Fact]
+        public void An_exception_should_be_thrown_on_sunset_if_there_is_no_population()
+        {
+            var world = new World();
+
+            Assert.Throws<Exception>(() => world.Sunset());
+        }
         
         static IPerson GetFakePerson()
         {
             var fakePerson = A.Fake<IPerson>();
             A.CallTo(() => fakePerson.Clone()).Returns(A.Fake<Person>());
             return fakePerson;
+        }
+        
+        static IEnumerable<IPerson> GenerateFakePersons(int population)
+        {
+            for (var i = 0; i < population; i++)
+            {
+                yield return A.Fake<IPerson>();
+            }
         }
     }
 }

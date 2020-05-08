@@ -11,7 +11,7 @@ namespace GameOfCorona
 
         public void Populate(List<IPerson> persons)
         {
-            if(Math.Sqrt(persons.Count) % 1 > 0) // TODO test
+            if(Math.Sqrt(persons.Count) % 1 > 0)
                 throw new ArgumentException("The square of the population count must be an integer.");
             
             var gridSize = (int)Math.Ceiling(Math.Sqrt(persons.Count));
@@ -49,7 +49,7 @@ namespace GameOfCorona
 
         public void Sunset()
         {
-            if(Population is null) // TODO test
+            if(Population is null)
                 throw new Exception("The world is not populated");
             
             foreach (var person in Population)
