@@ -7,6 +7,7 @@ namespace GameOfCorona
     public class World
     {
         public IPerson[,] Population { get; set; }
+        IPerson[,] PopulationSnapshot { get; set; }
 
         public void Populate(List<IPerson> persons)
         {
@@ -29,7 +30,8 @@ namespace GameOfCorona
 
         public void Sunrise()
         {
-            // Save population snapshot to compare with
+            PopulationSnapshot = GetPopulationSnapshot();
+            
             for (var i = 0; i < Population.GetLength(0); i++)
             {
                 for (var j = 0; j < Population.GetLength(1); j++)
@@ -43,6 +45,34 @@ namespace GameOfCorona
                     }
                 }
             }
+        }
+
+        public void Sunset()
+        {
+            if(Population is null) // TODO test
+                throw new Exception("The world is not populated");
+            
+            foreach (var person in Population)
+            {
+                person.Sleep();
+            }
+        }
+        
+        IPerson[,] GetPopulationSnapshot()
+        {
+            var gridSize = Population.GetLength(0);
+            var snapshot = new IPerson[gridSize, gridSize];
+            
+            for (var i = 0; i < gridSize; i++)
+            {
+                for (var j = 0; j < gridSize; j++)
+                {
+                    var person = Population[i,j];
+                    snapshot[i, j] = (IPerson)person.Clone();
+                }
+            }
+            
+            return snapshot;
         }
 
         IEnumerable<IPerson> GetNeighbours(int i, int j)
@@ -59,21 +89,10 @@ namespace GameOfCorona
 
         IPerson GetNeighbour(int i, int j) =>
             IsIndexWithinBounds(i, j)
-                ? Population[i, j]
+                ? PopulationSnapshot[i, j]
                 : null;
 
         bool IsIndexWithinBounds(int i, int j) => 
             i >= 0 && j >= 0 && i < Population.GetLength(0) && j < Population.GetLength(1);
-
-        public void Sunset()
-        {
-            if(Population is null)
-                throw new Exception("The world is not populated");
-            
-            foreach (var person in Population)
-            {
-                person.Sleep();
-            }
-        }
     }
 }

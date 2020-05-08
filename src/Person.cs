@@ -2,7 +2,7 @@ using System;
 
 namespace GameOfCorona
 {
-    public interface IPerson
+    public interface IPerson : ICloneable
     {
         public void Meet(IPerson person);
         public void Sleep();
@@ -27,7 +27,7 @@ namespace GameOfCorona
         {
             if (person.IsInQuarantine || IsImmune || IsDead) return;
             
-            if(CheckRandom(_probabilities.Infection))
+            if(person.IsInfected && CheckRandom(_probabilities.Infection))
                 IsInfected = person.IsInfected;
                 
             _hasMetInfectedPerson = person.IsInfected;
@@ -69,5 +69,15 @@ namespace GameOfCorona
             var randomFactor = random.Next(0, 100) / 100.0;
             return randomFactor <= probability;
         }
+
+        public object Clone() =>
+            new Person(_probabilities)
+            {
+                IsInfected = IsInfected,
+                IsInIsolation = IsInIsolation,
+                IsInQuarantine = IsInQuarantine,
+                IsImmune = IsImmune,
+                IsDead = IsDead
+            };
     }
 }
